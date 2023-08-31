@@ -20,7 +20,7 @@
       margin-bottom: 8px;
       font-weight: bold;
     }
-    input[type="text"], input[type="date"], input[type="button"], #generatedPassword {
+    input[type="text"], input[type="date"], input[type="number"], input[type="button"], #generatedPassword {
       width: 100%;
       padding: 8px;
       margin-bottom: 20px;
@@ -41,7 +41,7 @@
       display: flex;
       align-items: center;
     }
-    .copySection #generatedPassword {
+    .copySection #generatedPassword, .copySection #generatedUsername {
       margin-bottom: 0;
     }
     .copyButton {
@@ -54,7 +54,7 @@
 <body>
 
   <form id="userForm" method="post">
-    <label for="firstName">Vorname:</label>
+    <label for="firstName">Erster Vorname:</label>
     <input type="text" id="firstName" name="firstName" required><br>
 
     <label for="lastName">Nachname:</label>
@@ -63,12 +63,24 @@
     <label for="dob">Geburtsdatum:</label>
     <input type="date" id="dob" name="dob" required><br>
 
-    <input type="button" value="Passwort generieren" onclick="generatePassword()">
+    <label for="dob">Klasse:</label>
+    <input type="text" id="class" name="class" required><br>
+
+    <label for="dob">Eintrittsjahr in Klasse:</label>
+    <input type="number" id="entryYear" name="entryYear" min="2023" value="2023" required><br>
+
+    <input type="button" value="Login generieren" onclick="generatePassword()">
+
+    <label for="generatedUsername">Benutzername:</label>
+    <div class="copySection">
+      <input type="text" id="generatedUsername" readonly>
+      <button type="button" class="copyButton" onclick="copyToClipboard('generatedUsername')" title="In die Zwischenablage kopieren">📋</button>
+    </div><br>
 
     <label for="generatedPassword">Passwort:</label>
     <div class="copySection">
       <input type="text" id="generatedPassword" readonly>
-      <button class="copyButton" onclick="copyToClipboard()" title="In die Zwischenablage kopieren">📋</button>
+      <button type="button" class="copyButton" onclick="copyToClipboard('generatedPassword')" title="In die Zwischenablage kopieren">📋</button>
     </div>
   </form>
 
@@ -83,18 +95,22 @@
       const firstName = document.getElementById("firstName").value;
       const lastName = document.getElementById("lastName").value;
       const dob = document.getElementById("dob").value;
+      const cl = document.getElementById("class").value;
+      const entryYear = document.getElementById("entryYear").value;
 
       const day = dob.substring(8, 10);
       const month = dob.substring(5, 7);
       const year = dob.substring(2, 4);
 
+      const username = `${entryYear}_${cl.toLowerCase()}_${firstName.toLowerCase()}.${lastName.toLowerCase()}`;
       const password = `${firstName.charAt(0).toLowerCase()}.${lastName.charAt(0).toUpperCase()}.%${year}${month}${day}`;
 
+      document.getElementById("generatedUsername").value = username;
       document.getElementById("generatedPassword").value = password;
     }
 
-    function copyToClipboard() {
-      const passwordField = document.getElementById("generatedPassword");
+    function copyToClipboard(id) {
+      const passwordField = document.getElementById(id);
       passwordField.select();
       document.execCommand("copy");
     }
