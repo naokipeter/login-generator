@@ -64,11 +64,8 @@
 <body>
   <h1>Login-Generator für LONA</h1>
   <form id="userForm" method="post">
-    <label for="firstName">Vorname:</label>
-    <input type="text" id="firstName" name="firstName" required><br>
-
-    <label for="lastName">Nachname:</label>
-    <input type="text" id="lastName" name="lastName" required><br>
+    <label for="intranetLogin">Intranet-Login (vorname.nachname):</label>
+    <input type="text" id="intranetLogin" name="intranetLogin" required><br>
 
     <label for="dob">Geburtsdatum:</label>
     <input type="date" id="dob" name="dob" required><br>
@@ -102,8 +99,8 @@
         return;
       }
 
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
+      const intranetLogin = document.getElementById("intranetLogin").value;
+      const [firstName, lastName, ...rest] = intranetLogin.split('.');
       const dob = document.getElementById("dob").value;
       const cl = document.getElementById("class").value;
       const entryYear = document.getElementById("entryYear").value;
@@ -112,7 +109,7 @@
       const month = dob.substring(5, 7);
       const year = dob.substring(2, 4);
 
-      const username = `${entryYear}_${cl.toLowerCase()}_${firstName.toLowerCase()}.${lastName.toLowerCase()}`;
+      const username = `${entryYear}_${cl.toLowerCase()}_${intranetLogin.toLowerCase()}`;
       const password = `${firstName.charAt(0).toLowerCase()}.${lastName.charAt(0).toUpperCase()}.%${year}${month}${day}`;
 
       document.getElementById("generatedUsername").value = username;
